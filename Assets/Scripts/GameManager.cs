@@ -8,10 +8,12 @@ public class GameManager : MonoBehaviour
 {
     [Header("Prefabs")]
     [SerializeField] private GameObject playerPrefab;
-    [Header("Player Data")]
+    [SerializeField] private GameObject inventoryPrefab;
+    [Header("Items")]
+    [SerializeField] private List<BaseItem> items;
     private TMP_Text playerLevelText;
     public static GameManager Instance;
-    public Player MyPlayer;
+    private Player MyPlayer;
     public int CurrentLevel { get; private set; } = 0;
 
     private void Awake()
@@ -31,19 +33,25 @@ public class GameManager : MonoBehaviour
     {
         List<PlayerSaveData> players = ReadJsonData(Application.persistentDataPath + "/data.json");
         PlayerSaveData chosenPlayer = players.Find(p => p.playerName == playerName);
-        chosenPlayer.inventory = new List<Item>
+        chosenPlayer.inventory = new List<Item>()
         {
-          new("sword", "Sword", 4),
-          new("shield", "Shield", 2)
+            new(items[0], 3),
+            new(items[1], 6) 
         };
 
         if (chosenPlayer != null)
         {
             SceneManager.sceneLoaded += (scene, mode) =>
             {
-                GameObject p = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-                Player player = p.AddComponent<Player>();
-                player.Initialize(chosenPlayer.playerName, chosenPlayer.level, chosenPlayer.inventory);
+                GameObject p = Instantiate(playerPrefab);
+                Player player = p.GetComponent<Player>();
+                GameObject inventoryObj = Instantiate(inventoryPrefab);
+                Canvas canvas = FindAnyObjectByType<Canvas>();
+                inventoryObj.transform.SetParent(canvas.transform, false);
+                InventoryManager inventoryManager = inventoryObj.GetComponentInChildren<InventoryManager>();
+                inventoryManager.Initialize(chosenPlayer.inventory);
+                Debug.Log(inventoryManager);
+                player.Initialize(chosenPlayer.playerName, chosenPlayer.level, inventoryManager);
                 MyPlayer = player;
                 CurrentLevel = chosenPlayer.level;
                 playerLevelText = GameObject.Find("PlayerLevel_Text").GetComponent<TMP_Text>();

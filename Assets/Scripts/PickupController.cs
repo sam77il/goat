@@ -1,16 +1,35 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class PickupController : MonoBehaviour
 {
     [SerializeField] private TMP_Text itemLabel;
-    [SerializeField] private TMP_Text itemAmount;
-    private string itemName;
+    private List<Item> items;
 
-    public void Initialize(string name, string label, int amount)
+    public void Initialize(List<Item> items)
     {
-        itemName = name;
-        itemLabel.text = label;
-        itemAmount.text = amount.ToString();
+        this.items = new List<Item>(items);
+        LoadUI();
+    }
+
+    private void LoadUI()
+    {
+        if (items == null || items.Count == 0)
+        {
+            itemLabel.text = "No items available";
+            return;
+        }
+        itemLabel.text = "";
+        foreach (var item in items)
+        {
+            itemLabel.text += $"{item.itemAmount}x {item.baseItem.itemLabel} ";
+        }
+    }
+
+    public void ChangeItems(List<Item> newItems)
+    {
+        items = new List<Item>(newItems);
+        LoadUI();
     }
 }

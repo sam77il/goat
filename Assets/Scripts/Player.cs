@@ -5,12 +5,19 @@ public class Player : MonoBehaviour
 {
     private string pName;
     public int pLevel { get; private set; }
-    public List<Item> inventory { get; private set; }
-    public void Initialize(string playerName, int playerLevel, List<Item> playerInventory)
+    public InventoryManager inventory { get; private set; }
+    public void Initialize(string playerName, int playerLevel, InventoryManager playerInventory)
     {
-        this.pName = playerName;
-        this.pLevel = playerLevel;
-        this.inventory = playerInventory;
+        pName = playerName;
+        pLevel = playerLevel;
+        inventory = playerInventory;
+    }
+
+    public void AddInventoryItem(Item item)
+    {
+        if (inventory == null) return;
+
+        inventory.AddItem(item);
     }
 }
 

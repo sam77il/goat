@@ -674,6 +674,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 181789727358025171, guid: 1692998e893814449a9b32b97c490f8f, type: 3}
+      propertyPath: items.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 181789727358025171, guid: 1692998e893814449a9b32b97c490f8f, type: 3}
+      propertyPath: items.Array.data[0].baseItem
+      value: 
+      objectReference: {fileID: 11400000, guid: 0a98d9691418fe446b6b8875089ae6d4, type: 2}
+    - target: {fileID: 181789727358025171, guid: 1692998e893814449a9b32b97c490f8f, type: 3}
+      propertyPath: items.Array.data[1].baseItem
+      value: 
+      objectReference: {fileID: 11400000, guid: 0a96994a5bb2abd469f823c63d72a102, type: 2}
+    - target: {fileID: 181789727358025171, guid: 1692998e893814449a9b32b97c490f8f, type: 3}
+      propertyPath: items.Array.data[0].itemAmount
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 181789727358025171, guid: 1692998e893814449a9b32b97c490f8f, type: 3}
+      propertyPath: items.Array.data[1].itemAmount
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3257168170140957291, guid: 1692998e893814449a9b32b97c490f8f, type: 3}
       propertyPath: m_Name
       value: Chest

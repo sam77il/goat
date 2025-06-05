@@ -1,15 +1,16 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Chest : MonoBehaviour
 {
+    [SerializeField] private GameObject pickupPrefab;
+    [SerializeField] private List<Item> items;
     private bool isPlayerNearby = false;
     private bool isChestOpen = false;
-    public string itemName = "sword";
-    public string itemLabel = "Sword";
-    public int itemAmount = 1;
     private PlayerInputActions inputActions;
-    [SerializeField] private GameObject pickupPrefab;
+    private Player closestPlayer;
+    private PickupController pickupController;
 
     private void Awake()
     {
@@ -39,22 +40,33 @@ public class Chest : MonoBehaviour
 
     void OpenChest()
     {
+        if (closestPlayer == null)
+        {
+            Debug.LogWarning("Kein Spieler in der Nähe, um die Truhe zu öffnen.");
+            return;
+        }
         isChestOpen = true;
         Debug.Log("Truhe geöffnet!");
+        foreach (Item item in items)
+        {
+            closestPlayer.AddInventoryItem(item);
+        }
+        items.Clear();
+        pickupController.ChangeItems(items);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            closestPlayer = other.transform.parent.GetComponent<Player>();
+            Debug.Log(closestPlayer);
             isPlayerNearby = true;
-            Debug.Log("pickupPrefab: " + pickupPrefab + " | Objektname: " + gameObject.name);
             Canvas canvas = FindAnyObjectByType<Canvas>();
             GameObject p = Instantiate(pickupPrefab);
             p.transform.SetParent(canvas.transform, false);
-            PickupController pickupController = p.GetComponent<PickupController>();
-            pickupController.Initialize(itemName, itemLabel, itemAmount);
-            Debug.Log("Spieler in der Nähe – Drücke E zum Öffnen.");
+            pickupController = p.GetComponent<PickupController>();
+            pickupController.Initialize(items);
         }
     }
 
@@ -62,6 +74,7 @@ public class Chest : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Destroy(pickupController.gameObject);
             isPlayerNearby = false;
             Debug.Log("Spieler hat den Bereich verlassen.");
         }

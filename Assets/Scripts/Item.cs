@@ -1,13 +1,15 @@
+using UnityEngine;
+
+[System.Serializable]
 public class Item
 {
-    public string itemName;
-    public string itemLabel;
+    public BaseItem baseItem;
     public int itemAmount;
 
-    public Item(string name, string label, int amount)
+    public Item(BaseItem baseItem, int itemAmount)
     {
-        itemName = name;
-        itemLabel = label;
-        itemAmount = amount;
+        this.baseItem = baseItem;
+        this.itemAmount = itemAmount;
     }
+
 }
